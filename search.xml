@@ -235,7 +235,19 @@
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">char</span>* p = <span class="string">&quot;aaaaa&quot;</span>;</span><br><span class="line"><span class="type">int</span> i = <span class="number">12</span>;</span><br><span class="line"><span class="built_in">tfunc</span>(p, i);</span><br><span class="line"></span><br><span class="line"><span class="type">double</span> j = <span class="number">19.5</span>;</span><br><span class="line"><span class="built_in">tfunc</span>(j, i);</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">泛化版本执行了</span><br><span class="line">模板参数数量上的偏特化执行了（重载版本）</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="非类型模板参数"><a href="#非类型模板参数" class="headerlink" title="非类型模板参数"></a>非类型模板参数</h2>]]></content>
+<h2 id="非类型模板参数"><a href="#非类型模板参数" class="headerlink" title="非类型模板参数"></a>非类型模板参数</h2><p>模板参数不但可以是一个类型，也可以是一个普通的参数，参数还可以是一个默认值</p>
+<ul>
+<li>范例<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U, <span class="type">int</span> val </span>= <span class="number">0</span>&gt;</span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">Add</span><span class="params">(T tv1, U tv2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> tv1 + tv2 + val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="built_in">Add</span>&lt;<span class="type">float</span>, <span class="type">float</span>&gt;(<span class="number">1.1f</span>, <span class="number">12.3f</span>) &lt;&lt; std::endl;</span><br><span class="line">std::cout &lt;&lt; <span class="built_in">Add</span>&lt;<span class="type">float</span>, <span class="type">float</span>, <span class="number">1</span>&gt;(<span class="number">1.1f</span>, <span class="number">12.3f</span>) &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">13.4</span><br><span class="line">14.4</span><br></pre></td></tr></table></figure>
+以上要注意的点<ul>
+<li>在指定非类型模板参数时，一般给的是常量，否则编译报错。</li>
+<li>并不是任何类型的参数都可以，int可以，但float, double类型不行，类类型也不可以，不过double* 等指针类型可以</li>
+<li>主要有整型或枚举型，指针类型, 左值引用类型,auto或decltype(auto)这个用法…..</li>
+</ul>
+</li>
+</ul>
+]]></content>
       <categories>
         <category>C++</category>
       </categories>
