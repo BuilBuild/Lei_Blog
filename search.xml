@@ -198,4 +198,30 @@
     <url>/Lei_Blog/2024/11/01/test/</url>
     <content><![CDATA[]]></content>
   </entry>
+  <entry>
+    <title>C++模板与泛型_基础_01</title>
+    <url>/Lei_Blog/2024/11/02/C-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B-%E5%9F%BA%E7%A1%80-01/</url>
+    <content><![CDATA[<h1 id="模板与基础知识"><a href="#模板与基础知识" class="headerlink" title="模板与基础知识"></a>模板与基础知识</h1><h2 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h2><ul>
+<li>基础范例  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">T <span class="title">Sub</span><span class="params">(T tv1, T tv2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> tv1 - tv2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  在main中添加如下代码  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> subv = <span class="built_in">Sub</span>(<span class="number">3</span>, <span class="number">5</span>);</span><br><span class="line">std::cout &lt;&lt; subv &lt;&lt; std::endl;</span><br></pre></td></tr></table></figure>
+  上述是一个函数模板的典型范例，T为模板参数，准确说是类型模板参数，因为其代表一个类型。    </li>
+<li>实例化<br>  用具体的类型代替类型模板参数的过程叫做实例化，也称之为代码生成器。</li>
+</ul>
+<h2 id="模板参数推断"><a href="#模板参数推断" class="headerlink" title="模板参数推断"></a>模板参数推断</h2><ul>
+<li>常规的参数推断  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U, <span class="keyword">typename</span> V&gt;</span></span><br><span class="line"><span class="function">V <span class="title">Add</span><span class="params">(T tv1, U tv2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> tv1 + tv2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  这个函数模板中定义了3个类型模板参数T、U，V。当如此实例化并调用<code>std::cout &lt;&lt; Add(15, 17, 18) &lt;&lt; std::endl;</code>，一定会发生错误。<br>  因为编译器无法推断出返回值类型V，因此只能手动指定类型，如：<code>std::cout &lt;&lt; Add&lt;..., ..., double&gt;(15, 17, 18) &lt;&lt; std::endl;</code>,<br>  虽然可以指定一定量的模板参数，但编译器是按顺序来知道指定的类型的，只能按顺序去指定模板参数。例如<code>Add&lt;double&gt;(...,...)</code>就会发生错误，<br>  如改成以下方式就可以成功编译,让编译器去推断T，U：  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> V, <span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</span></span><br><span class="line"><span class="function">V <span class="title">Add</span><span class="params">(T tv1, U tv2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> tv1 + tv2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>关键字推断auto, decltype<br>  auto 结合decltype构成返回类型后置语法，代码如下：  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">Add</span><span class="params">(T tv1, U tv2)</span> -&gt; <span class="title">decltype</span><span class="params">(tv1 + tv2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> tv1 + tv2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>自动推断，指定推断，指定空模板参数列表     <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">T <span class="title">myDouble</span> <span class="params">(T temp_value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> temp_value * <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  自动推断<code>int result = myDouble(12)</code>, 此时推断出T为int类型<br>  指定推断<code>int result = myDouble&lt;int&gt;(12)</code>,指定类型为int类型<br>  指定空模板参数<code>auto result = myDouble&lt;&gt;(12.6)</code>,此时编译器根据函数参数推断出T为double类型，<br>  当前情况与<code>auto result = myDouble(12.6)</code>没什么不同，若存在一个普通的myDouble函数，&lt;&gt;就会<br>  发生作用:      <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">myDouble</span> <span class="params">(<span class="type">double</span> temp_value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> temp_value * <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  若进行这般调用<code>auto result = myDouble(12.6)</code>，其会调用普通函数。</li>
+</ul>
+<h2 id="重载"><a href="#重载" class="headerlink" title="重载"></a>重载</h2><p>函数（函数模板）重载的概念：函数名相同，但函数参数或类型不同。编译器会更具具体情况选择编译器认为最合适的函数<br>模板实例化或者普通函数进行调用</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++泛型</tag>
+      </tags>
+  </entry>
 </search>
