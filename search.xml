@@ -255,4 +255,32 @@
         <tag>C++泛型</tag>
       </tags>
   </entry>
+  <entry>
+    <title>vsftpd简单安装和使用</title>
+    <url>/Lei_Blog/2024/11/03/vsftpd%E7%AE%80%E5%8D%95%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="Ubuntu系统FTP服务器搭建"><a href="#Ubuntu系统FTP服务器搭建" class="headerlink" title="Ubuntu系统FTP服务器搭建"></a>Ubuntu系统FTP服务器搭建</h2><h3 id="安装vsftpd软件"><a href="#安装vsftpd软件" class="headerlink" title="安装vsftpd软件"></a>安装vsftpd软件</h3><p><a href="https://www.cnblogs.com/HOsystem/p/16629572.html">详细配置说明链接</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get install vsftpd</span><br><span class="line"> </span><br><span class="line"># 设置开机启动并启动ftp服务</span><br><span class="line">systemctl enable vsftpd</span><br><span class="line">systemctl start vsftpd</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#查看其运行状态</span><br><span class="line">systemctl  status vsftpd</span><br><span class="line">#重启服务</span><br><span class="line">systemctl  restart vsftpd</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo useradd -d /home/ftp/ftp_root -m ftpadmin</span><br><span class="line">sudo passwd ftpadmin</span><br><span class="line">输入密码：</span><br><span class="line">再次输入密码：</span><br><span class="line">chmod -R 777 /home/ftp/ftp_root</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo nano /etc/vsftpd.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">存在的修改成酱紫：</span><br><span class="line">listen=NO # 阻止 vsftpd 在独立模式下运行</span><br><span class="line">listen_ipv6=YES # vsftpd 将监听 ipv6 而不是 IPv4，你可以根据你的网络情况设置</span><br><span class="line">anonymous_enable=NO # 关闭匿名登录</span><br><span class="line">local_enable=YES # 允许本地用户登录</span><br><span class="line">write_enable=YES # 启用可以修改文件的 FTP 命令</span><br><span class="line">local_umask=022 # 本地用户创建文件的 umask 值</span><br><span class="line">dirmessage_enable=YES # 当用户第一次进入新目录时显示提示消息</span><br><span class="line">xferlog_enable=YES # 一个存有详细的上传和下载信息的日志文件</span><br><span class="line">connect_from_port_20=YES # 在服务器上针对 PORT 类型的连接使用端口 20（FTP 数据）</span><br><span class="line">xferlog_std_format=YES # 保持标准日志文件格式</span><br><span class="line">pam_service_name=vsftpd # vsftpd 将使用的 PAM 验证设备的名字</span><br></pre></td></tr></table></figure>
+<p>修改配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/etc/vsftpd.conf </span><br><span class="line">将pam_service_name=vsftpd   修改为：pam_service_name=ftp</span><br></pre></td></tr></table></figure>
+<p>最后添加</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">userlist_deny=NO</span><br><span class="line">userlist_enable=YES</span><br><span class="line">userlist_file=/etc/vsftpd.allowed_users</span><br><span class="line"></span><br><span class="line">nano /etc/vsftpd.chroot_list</span><br><span class="line">#输入ftpadmin后保存退出</span><br><span class="line">开启端口 数据传输20 命令交互21</span><br><span class="line">sudo ufw allow 20</span><br><span class="line">sudo ufw allow 21</span><br><span class="line">#重启服务</span><br><span class="line">systemctl start vsftpd</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ftp localhost</span></span><br><span class="line">Connected to localhost.</span><br><span class="line">500 OOPS: cannot read user list file:/etc/vsftpd.allowed_users</span><br><span class="line"><span class="meta prompt_">ftp&gt; </span><span class="language-bash"><span class="built_in">exit</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="远程登陆"><a href="#远程登陆" class="headerlink" title="远程登陆"></a>远程登陆</h2><h3 id="安装filezilla"><a href="#安装filezilla" class="headerlink" title="安装filezilla"></a>安装filezilla</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get install filezilla</span><br></pre></td></tr></table></figure>
+<p>输入相关选项即可连接</p>
+]]></content>
+      <categories>
+        <category>tool</category>
+      </categories>
+      <tags>
+        <tag>vsftpd</tag>
+      </tags>
+  </entry>
 </search>
