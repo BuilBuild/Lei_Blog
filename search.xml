@@ -421,7 +421,7 @@ main中插入<figure class="highlight cpp"><table><tr><td class="code"><pre><spa
       </tags>
   </entry>
   <entry>
-    <title>C++模板与泛型-基础-03</title>
+    <title>C++模板与泛型_基础_03</title>
     <url>/Lei_Blog/2024/11/09/C-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B-%E5%9F%BA%E7%A1%80-03/</url>
     <content><![CDATA[<h2 id="类模板中的友元"><a href="#类模板中的友元" class="headerlink" title="类模板中的友元"></a>类模板中的友元</h2><h3 id="友元类"><a href="#友元类" class="headerlink" title="友元类"></a>友元类</h3><p>让某个类B成为另外一个类A的友，这样B类就可以访问类A的所有变量和函数</p>
 <ul>
